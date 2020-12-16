@@ -215,7 +215,7 @@ while True:
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label text
 	    
 	    # Trigger GPIO pin when object detection
-            if(int(scores[i]*100 >= 55):
+            if int(scores[i]*100) >= 55:
                 print("Person Detected: ", object_name)
                 time.sleep(10)
 	       
