@@ -130,8 +130,7 @@ if labels[0] == '???':
 
 # Determine which label number corresponds to 'person' 
 for i, label in enumerate(labels):
-    print(i)
-    print(": ")
+    print(i,": ")
     print(label)
     
 # Load the Tensorflow Lite model.
@@ -215,8 +214,8 @@ while True:
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label text
 	    
 	    # Trigger GPIO pin when object detection
-            if int(scores[i]*100) >= 55:
-                print("Person Detected: ", object_name)
+            if int(scores[i]*100) >= 55 and object_name == "person":
+                print("Object Detected:", object_name)
                 time.sleep(10)
 	       
     # Draw framerate in corner of frame
