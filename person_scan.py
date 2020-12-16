@@ -22,6 +22,12 @@ import sys
 import time
 from threading import Thread
 import importlib.util
+import RPi.GPIO as GPIO
+
+# Set up GPIO control pin to stop motor
+motorPin = 17
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(motorPin,GPIO.OUT)
 
 # Define VideoStream class to handle streaming of video from webcam in separate processing thread
 # Source - Adrian Rosebrock, PyImageSearch: https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/
@@ -216,7 +222,9 @@ while True:
 	    # Trigger GPIO pin when object detection
             if int(scores[i]*100) >= 55 and object_name == "person":
                 print("Object Detected:", object_name)
+                GPIO.output(motorPin,GPIO.HIGH)
                 time.sleep(10)
+                GPIO.output(motorPin,GPIO.LOW)
 	       
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
