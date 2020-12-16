@@ -129,10 +129,10 @@ if labels[0] == '???':
     del(labels[0])
 
 # Determine which label number corresponds to 'person' 
-for i in enumerate(labels):
+for i, label in enumerate(labels):
     print(i)
     print(": ")
-    print(labels[i])
+    print(label)
     
 # Load the Tensorflow Lite model.
 # If using Edge TPU, use special load_delegate argument
