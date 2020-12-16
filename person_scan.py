@@ -128,6 +128,10 @@ with open(PATH_TO_LABELS, 'r') as f:
 if labels[0] == '???':
     del(labels[0])
 
+# Determine which label number corresponds to 'person' 
+for i in enumerate(labels):
+    print(i, ", " labels[i])
+    
 # Load the Tensorflow Lite model.
 # If using Edge TPU, use special load_delegate argument
 if use_TPU:
@@ -207,7 +211,12 @@ while True:
             label_ymin = max(ymin, labelSize[1] + 10) # Make sure not to draw label too close to top of window
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label text
-
+	    
+	    # Trigger GPIO pin when object detection
+	    if(int(scores[i]*100 >= 55):
+	        print("Person Detected: ", object_name)
+	        time.sleep(10)
+	       
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
 
