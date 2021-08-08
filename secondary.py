@@ -24,10 +24,10 @@ from threading import Thread
 import importlib.util
 import RPi.GPIO as GPIO
 
-# Set up GPIO control pin to stop motor
-#motorPin = 17
-#GPIO.setmode(GPIO.BCM)
-#GPIO.setup(motorPin,GPIO.OUT)
+# Set up GPIO control pin to signal detection to primary camera
+detectionPin = 17
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(detectionPin,GPIO.OUT)
 
 # Set detection sensitivity threshold
 sensitivity = 40
@@ -220,9 +220,9 @@ while True:
 	    # Trigger GPIO pin when object detection
             if int(scores[i]*100) >= sensitivity and object_name == "person":
                 print("Object Detected:", object_name)
-                #GPIO.output(motorPin,GPIO.HIGH)
-                time.sleep(10)
-                #GPIO.output(motorPin,GPIO.LOW)
+                GPIO.output(detectionPin,GPIO.HIGH)
+                time.sleep(.1)
+                GPIO.output(detectionPin,GPIO.LOW)
 	       
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
