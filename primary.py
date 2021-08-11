@@ -24,25 +24,20 @@ from threading import Thread
 import importlib.util
 import RPi.GPIO as GPIO
 
-# Set up GPIO control pin to signal detection to primary camera
-detectionPin = 17
+# Set up GPIO control pins
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(detectionPin,GPIO.OUT)
-
-# Set up GPIO control pin to input detection from secondary cameras
 inputPin1 = 23
 inputPin2 = 24
-inputPin3 = 25
 GPIO.setup(inputPin1,GPIO.IN)
 GPIO.setup(inputPin2,GPIO.IN)
-GPIO.setup(inputPin3,GPIO.IN)
-
-#Set up GPIO control pin to signal motor to stop
 motorPin = 26
 GPIO.setup(motorPin,GPIO.OUT)
 
 # Set detection sensitivity threshold
 sensitivity = 40
+
+# Set original detection status of primary camera to False
+detected=False
 
 # Define VideoStream class to handle streaming of video from webcam in separate processing thread
 # Source - Adrian Rosebrock, PyImageSearch: https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/
@@ -229,12 +224,10 @@ while True:
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label text
 	    
-	    # Trigger GPIO pin when object detection
+	    # Change primary camera detection status to True
             if int(scores[i]*100) >= sensitivity and object_name == "person":
                 print("Object Detected:", object_name)
-                GPIO.output(detectionPin,GPIO.HIGH)
-                time.sleep(.1)
-                GPIO.output(detectionPin,GPIO.LOW)
+                detected=True
 	       
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
@@ -248,9 +241,11 @@ while True:
     frame_rate_calc= 1/time1
 
     #Stop the motor if person detected on any of the cameras
-    if GPIO.input(inputPin1) or GPIO.input(inputPin2) or GPIO.input(inputPin3) ==0:
+    if detected or GPIO.input(inputPin1):
+        print("STOP THE WALL!!!")
         GPIO.output(motorPin,GPIO.HIGH)
         time.sleep(3)
+        detected=False
         GPIO.output(motorPin,GPIO.LOW)
 
     # Press 'q' to quit
