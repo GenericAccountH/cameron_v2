@@ -241,7 +241,7 @@ while True:
     frame_rate_calc= 1/time1
 
     #Stop the motor if person detected on any of the cameras
-    if detected or GPIO.input(inputPin1):
+    if detected or GPIO.input(inputPin1) or GPIO.input(inputPin2):
         print("STOP THE WALL!!!")
         GPIO.output(motorPin,GPIO.HIGH)
         time.sleep(3)
