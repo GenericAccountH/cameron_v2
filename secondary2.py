@@ -25,6 +25,7 @@ import importlib.util
 import RPi.GPIO as GPIO
 
 # Set up GPIO control pin to signal detection to primary camera
+GPIO.setwarnings(False)
 detectionPin = 17
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(detectionPin,GPIO.OUT)

@@ -25,6 +25,7 @@ import importlib.util
 import RPi.GPIO as GPIO
 
 # Set up GPIO control pins
+GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 inputPin1 = 23
 inputPin2 = 24
