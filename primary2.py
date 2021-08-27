@@ -256,7 +256,7 @@ while True:
         GPIO.output(motorPin,GPIO.HIGH)
 
     #Stop the motor if either of the secondary cameras are down
-    while GPIO.input(statusPin1) or GPIO.input(statusPin2):
+    while not GPIO.input(statusPin1) or not GPIO.input(statusPin2):
         GPIO.output(motorPin,GPIO.LOW)
 
     # Press 'q' to quit
